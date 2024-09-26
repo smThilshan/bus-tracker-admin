@@ -1,7 +1,10 @@
 import 'package:bus_tracker_admin/screens/add_hire_screen.dart';
 import 'package:bus_tracker_admin/screens/add_route_screen.dart';
+import 'package:bus_tracker_admin/screens/log_income_screen.dart';
+import 'package:bus_tracker_admin/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:bus_tracker_admin/screens/add_expenses_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = 'home_screen';
@@ -12,7 +15,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final CarouselController _carouselController = CarouselController();
-  int _currentSlide = 0;
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -22,7 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Adding dialog box
-
   void _showAddDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -42,11 +43,11 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _buildAddItemOption(Icons.money_rounded, 'Route', context),
+                _buildAddItemOption(Icons.route, 'Route', context),
                 const SizedBox(height: 12),
-                _buildAddItemOption(Icons.schedule, 'Hire', context),
+                _buildAddItemOption(Icons.directions_bus, 'Hire', context),
                 const SizedBox(height: 12),
-                _buildAddItemOption(Icons.schedule, 'Expenses', context),
+                _buildAddItemOption(Icons.money_off, 'Expenses', context),
                 const SizedBox(height: 12),
                 _buildAddItemOption(Icons.notifications, 'Reminder', context),
               ],
@@ -68,11 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
         } else if (title == 'Hire') {
           Navigator.pushNamed(context, AddHireScreen.routeName);
         } else if (title == 'Expenses') {
-          // Navigate to the vehicle screen
-          // Navigator.pushNamed(context, AddVehicleScreen.routeName);
+          Navigator.pushNamed(context, AddExpenseScreen.routeName);
         } else if (title == 'Reminder') {
-          // Navigate to the reminder screen
-          // Navigator.pushNamed(context, AddReminderScreen.routeName);
+          // Navigate to the reminder screen (Placeholder)
         }
       },
       child: Container(
@@ -143,23 +142,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 12),
-            if (_selectedIndex == 0) ...[
-              // Content for Home
-              Text("Home"),
-              const SizedBox(height: 5),
-            ] else if (_selectedIndex == 1) ...[
-              // const VehicleScreen(),
-            ] else if (_selectedIndex == 2) ...[
-              // ExpensesScreen(),
-            ] else if (_selectedIndex == 3) ...[
-              // ReminderScreen(),
-            ],
-          ],
-        ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          // Content for Home
+          // Center(child: Text("Home")),
+          DashboardScreen(),
+          // IncomeScreen is properly placed here
+          IncomeScreen(),
+          // Placeholder for ExpensesScreen
+          Center(child: Text("Expenses")),
+          // Placeholder for ReminderScreen
+          Center(child: Text("Reminder")),
+        ],
       ),
     );
   }
